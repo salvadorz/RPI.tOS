@@ -3,7 +3,7 @@
 
 ### BCM2836
 
-The Broadcom chip used in the Raspberry Pi 2 Model B. The underlying architecture in BCM2836 is identical to BCM2835. The only significant difference is the removal of the ARM1176JZF-S processor and replacement with a quad-core Cortex-A7 cluster.
+The Broadcom chip used in the Raspberry Pi 2 Model B. The underlying architecture in BCM2836 is identical to [BCM2835](BCM2835-ARM-Peripherals.pdf "BCM2835 ARM Peripherals"). The only significant difference is the removal of the ARM1176JZF-S processor and replacement with a quad-core Cortex-A7 cluster.
 
 You should refer to:
 
