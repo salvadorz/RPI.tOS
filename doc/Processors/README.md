@@ -17,9 +17,9 @@ This is the Broadcom chip used in the Raspberry Pi 3 Model B, later models of th
 
 The ARM cores run at 1.2GHz, making the device about 50% faster than the Raspberry Pi 2. The VideoCore IV runs at 400MHz.
 
-Please refer to the following BCM2836 document for details on the ARM peripherals specification, which also applies to the BCM2837.
+Please refer to the following BCM2837 document for details on the ARM peripherals specification.
 
-* [BCM2836 ARM-local peripherals](bcm2836-peripherals.pdf "BCM2836 ARM-local peripherals")
+* [BCM2837 ARM-local peripherals](bcm2837-peripherals_v2-1.pdf "BCM2837 ARM-local peripherals")
 
 * [Cortex-A53 MPCore Processor TRM](Arm-Cortex-A53_MPCore_Processor_TRM "Cortex-A53 MPCore Processor Technical Reference Manual")
 
