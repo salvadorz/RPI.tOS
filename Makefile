@@ -6,8 +6,7 @@ endif
 
 RPI_VERSION ?= 4
 
-#BOOTMNT ?= /media/boot
-BOOTMNT ?= /home/john/repos/embedded_linux/RPI_tOS/boot
+BOOTMNT ?= /media/boot
 
 ARMGNU = aarch64-none-linux-gnu-
 ifdef ARMGNU
@@ -41,7 +40,7 @@ C_FILES = $(wildcard $(SRC_DIR)/*.c)
 S_FILES = $(wildcard $(SRC_DIR)/*.S)
 # Variable expansion and patterns generates the names of o-files based on c files with pattern *_c.o
 O_FILES = $(C_FILES:$(SRC_DIR)/%.c=$(BUILD_DIR)/%_c.o)
-O_FILES += $(C_FILES:$(SRC_DIR)/%.S=$(BUILD_DIR)/%_s.o)
+O_FILES += $(S_FILES:$(SRC_DIR)/%.S=$(BUILD_DIR)/%_s.o)
 
 DEP_FILES = $(O_FILES:%.o=%.d)
 -include $(DEP_FILES)
@@ -53,9 +52,8 @@ kernel8.img: $(SRC_DIR)/linker.ld $(O_FILES)
 	$(ARMGNU)ld -T $(SRC_DIR)/linker.ld -o $(BUILD_DIR)/kernel8.elf $(O_FILES)
 	$(ARMGNU)objcopy $(BUILD_DIR)/kernel8.elf -O binary kernel8.img
 ifeq ($(RPI_VERSION), 4)
-	cp kernel8.img $(BOOTMNT)/kernel8-rpi4.img
+	rsync -av kernel8.img $(BOOTMNT)/kernel8-rpi4.img
 else
-	cp kernel8.img $(BOOTMNT)/
+	rsync -av kernel8.img $(BOOTMNT)/kernel8.img
 endif
-	cp config.txt $(BOOTMNT)/
-#	sync
+	rsync -av config.txt $(BOOTMNT)/config.txt
