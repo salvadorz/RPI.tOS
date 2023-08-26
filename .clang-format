@@ -3,6 +3,8 @@
 Language:        Cpp
 Standard:        c++03
 
+AlignConsecutiveMacros: Consecutive
+
 # The extra indent or outdent of access modifiers, e.g. public:
 AccessModifierOffset: -2
 # Aligns arguments after an open bracket. [Align, DontAlign AlwaysBreak]
@@ -10,7 +12,7 @@ AlignAfterOpenBracket:  Align
 # Align array column and right justify the columns
 AlignArrayOfStructures: None
 # Align the C/C++ preprocessor macros of consecutive lines.
-AlignConsecutiveMacros: None
+# AlignConsecutiveMacros: None
 # Align the assignment operators of consecutive lines
 AlignConsecutiveAssignments:  None
 # Do not align the colons of consecutive bitfields
@@ -412,4 +414,3 @@ WhitespaceSensitiveMacros:
   - BOOST_PP_STRINGIZE
   - NS_SWIFT_NAME
   - CF_SWIFT_NAME
-...
