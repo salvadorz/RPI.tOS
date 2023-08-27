@@ -1,0 +1,13 @@
+# https://www.raspberrypi.com/documentation/computers/config_txt.html#file-format
+
+# kernel will be started in 64-bit mode
+arm_64bit=1
+
+# second-stage loader (boot code in the EEPROM for RP4) and the main FW (start*.elf) output diagnostic info to UART0
+uart_2ndstage=1
+
+# To avoid interfere uart_2ndstage with BT, redirect to the other UART
+dtoverlay=miniuart-bt
+
+[pi4]
+kernel=kernel8-rpi4.img
