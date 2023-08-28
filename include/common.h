@@ -12,6 +12,11 @@
 // Include
 #include <stdint.h>
 
+#define SET (1U)
+#define CLR (0U)
+
+#define BYTE_MSK (0xFFU)
+
 typedef uint8_t  u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
