@@ -12,10 +12,13 @@
 // Includes
 #include "common.h"
 
-#define CLR_REG(reg, msk, pox) (reg & ~(msk << pox))
-#define SET_REG(reg, val, pox) (reg | (val << pox))
-#define CLR_BIT(pox)           ~(1 << (pox))
-#define SET_BIT(pox)           (1 << (pox))
+/**
+ * @brief Clears or Writes a field (msk/val) in register at start bit (pox)
+ */
+#define CLR_FLD_REG(reg, msk, pox) (reg & ~(msk << pox))
+#define SET_FLD_REG(reg, val, pox) (reg | (val << pox))
+#define CLR_BIT_POX(pox)           ~(1 << (pox))
+#define SET_BIT_POX(pox)           (1 << (pox))
 
 /**
  * @brief wait for n-ticks (cycles) amount

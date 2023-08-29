@@ -20,7 +20,7 @@
 #define GPIO_FSEL_BIT_MSK   ((1 << GPIO_FSEL_BIT_GRP) - 1) /* FSELn Bit field Mask*/
 #define GPIO_PUDCLKn_MAX    (32u) /* PUDCLKn 0 - 31 and 32-53*/
 #define GPIO_WAIT_TICKs     (150U)
-#define AUX_REGISTER_OFFSET (0x00200000)
+#define GPIO_REG_OFFSET     (0x00200000)
 
 struct GPIO_CFG {
   reg32 const RESERVED;
@@ -44,6 +44,6 @@ struct GPIO_REG {
   reg32 GPPUDCLK_En[2];
 };
 
-#define GPIO_REG_MAP ((struct GPIO_REG *)(PBASE + 0x00200000))
+#define GPIO_REG_MAP ((struct GPIO_REG *)(PBASE + GPIO_REG_OFFSET))
 
 #endif /* GPIO_REG_BCM283X_H_ */

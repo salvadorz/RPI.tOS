@@ -20,7 +20,7 @@
 #define GPIO_FSEL_BIT_MSK   ((1 << GPIO_FSEL_BIT_GRP) - 1) /* FSELn Bit field Mask*/
 #define GPIO_PUPD_CTL_MAX   (4U)  /* GPIO_PUP_PDN_CNTRL_REG0-3 */
 #define GPIO_PUPD_PIN_GRP   (16U) /* GPIO PUPPD MAX nPin per Register */
-#define AUX_REGISTER_OFFSET (0x00200000)
+#define GPIO_REG_OFFSET     (0x00200000)
 
 struct GPIO_CFG {
   reg32 const RESERVED;
@@ -43,6 +43,6 @@ struct GPIO_REG {
   reg32 GPPUD_CNTRL[GPIO_PUPD_CTL_MAX];
 };
 
-#define GPIO_REG_MAP ((struct GPIO_REG *)(PBASE + 0x00200000))
+#define GPIO_REG_MAP ((struct GPIO_REG *)(PBASE + GPIO_REG_OFFSET))
 
 #endif /* GPIO_REG_BCM2711_H_ */
