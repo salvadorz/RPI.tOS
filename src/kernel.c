@@ -32,6 +32,7 @@
 
 #include "common.h"
 #include "mini_uart.h"
+#include "stdio.h"
 
 int kernel_main() {
 
