@@ -10,7 +10,7 @@
 #define STDIO_H_
 
 /* configure the underlaying output char method*/
-#define output_char(x)    uart_send(x)
+#define output_char(x)   mini_uart_send(x)
 #define STDIO_PERIPHERAL "mini_uart.h"
 
  // Includes

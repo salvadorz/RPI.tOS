@@ -15,14 +15,14 @@
 #define TXD1 GPIO14
 #define RXD1 GPIO15
 
-#define UART_TX_READY  (20U) // Transmitter IDLE AUX_MU_LSR
-#define UART_RX_READY  (1U)  // Data Ready
-#define UART_8BIT_MODE (3U)
-#define UART_TX_flwCTS (8U) // Auto flow-ctrl using CTS
-#define UART_RX_as_RTR (4U) // Ready to Receive with RST line
-#define UART_TX_ENABLE (2U)
-#define UART_RX_ENABLE (1U)
-#define UART_CNTRL_CFG (UART_TX_ENABLE | UART_RX_ENABLE)
+#define mUART_TX_READY  (20U) // Transmitter IDLE AUX_MU_LSR
+#define mUART_RX_READY  (1U)  // Data Ready
+#define mUART_8BIT_MODE (3U)
+#define mUART_TX_flwCTS (8U) // Auto flow-ctrl using CTS
+#define mUART_RX_as_RTR (4U) // Ready to Receive with RST line
+#define mUART_TX_ENABLE (2U)
+#define mUART_RX_ENABLE (1U)
+#define mUART_CNTRL_CFG (mUART_TX_ENABLE | mUART_RX_ENABLE)
 
 #define MHz               (1000000)
 #define BAUD_RATE_9600    (9600)
@@ -37,9 +37,9 @@
 #endif
 #define BAUD_RATE_REG_16B ((SYSTEM_CLOCK_FREQ / (BAUD_RATE_DEFAULT * 8)) - 1) & 0xFFFF;
 
-void uart_init();
-char uart_recv();
-void uart_send(char c);
-void uart_send_string(char *str);
+void mini_uart_init();
+char mini_uart_recv();
+void mini_uart_send(char c);
+void mini_uart_send_string(char *str);
 
 #endif /* MINI_UART_H_ */
