@@ -19,16 +19,23 @@
 #define UART_RX_READY  (1U)  // Data Ready
 #define UART_8BIT_MODE (3U)
 #define UART_TX_flwCTS (8U) // Auto flow-ctrl using CTS
-#define UART_RX_as_RTR (4U) //Ready to Receive with RST line
+#define UART_RX_as_RTR (4U) // Ready to Receive with RST line
 #define UART_TX_ENABLE (2U)
 #define UART_RX_ENABLE (1U)
 #define UART_CNTRL_CFG (UART_TX_ENABLE | UART_RX_ENABLE)
 
+#define MHz               (1000000)
+#define BAUD_RATE_9600    (9600)
+#define BAUD_RATE_19200   (19200)
+#define BAUD_RATE_57600   (57600)
+#define BAUD_RATE_115200  (115200)
+#define BAUD_RATE_DEFAULT BAUD_RATE_115200
 #if (RPI_VERSION == 3)
-    #define UART_BAUD_RATE (270U) // 115200 @ 250Mhz
+  #define SYSTEM_CLOCK_FREQ (250 * MHz)
 #elif (RPI_VERSION == 4)
-    #define UART_BAUD_RATE (541U) // 115200 @ 500Mhz
+  #define SYSTEM_CLOCK_FREQ (500 * MHz)
 #endif
+#define BAUD_RATE_REG_16B ((SYSTEM_CLOCK_FREQ / (BAUD_RATE_DEFAULT * 8)) - 1) & 0xFFFF;
 
 void uart_init();
 char uart_recv();

@@ -29,7 +29,7 @@ void uart_init() {
   // No RTS
   AUX_REG_MAP->AUX_MU_MCR  = CLR;
 
-  AUX_REG_MAP->AUX_MU_BAUD = UART_BAUD_RATE;
+  AUX_REG_MAP->AUX_MU_BAUD = BAUD_RATE_REG_16B;
   AUX_REG_MAP->AUX_MU_CNTL = SET_FLD_REG(AUX_REG_MAP->AUX_MU_CNTL, UART_CNTRL_CFG, 0);
 
   // Starting from known pox
