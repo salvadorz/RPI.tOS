@@ -37,12 +37,13 @@
 int kernel_main() {
 
   uart_init();
+  init_printf(0, putc);
 
-  uart_send_string("Rasperry PI Bare Metal OS Initializing...\n");
+  printf("Rasperry PI %d Bare Metal OS Initializing...\n", RPI_VERSION);
 
   while (1) {
     // echo
-    uart_send(uart_recv());
+    printf("%c",uart_recv());
   }
 
   return 0;
