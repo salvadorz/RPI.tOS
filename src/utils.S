@@ -17,3 +17,16 @@ read_reg:
     //Load the content of address x0 in w0
     ldr w0, [x0]
     ret
+
+.globl get_proc_id
+get_proc_id:
+    mrs x0, mpidr_el1
+    and x0, x0, #0xFF
+    ret
+
+.globl get_exc_lvl
+get_exc_lvl:
+    mrs x0, CurrentEL
+    //Logical shifting to Right
+    lsr x0, x0, #2
+    ret

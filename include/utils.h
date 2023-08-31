@@ -47,5 +47,17 @@ void write_reg(u64 address, u32 value);
  * @return u32
  */
 u32 read_reg(u64 address);
+/**
+ * @brief Get the processor id
+ * 
+ * @return u32 
+ */
+u32 get_proc_id();
+/**
+ * @brief Get Exception Level (0-3)
+ * 0 - Usr; 1 - OS; 2 - Hypervisor; 3 - FW (secure)
+ * @return u32
+ */
+u32 get_exc_lvl();
 
 #endif /* UTILS_H_ */
