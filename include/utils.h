@@ -12,6 +12,13 @@
 // Includes
 #include "common.h"
 
+#define DO_PRAGMA(x) _Pragma(#x)
+#if 0
+  #define TODO(x) DO_PRAGMA(message("TODO - " #x))
+#else
+  #define TODO(x) // TODO(x)
+#endif
+
 /**
  * @brief Clears or Writes a field (msk/val) in register at start bit (pox)
  */

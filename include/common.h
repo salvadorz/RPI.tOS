@@ -9,23 +9,31 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-// Include
-#include <stdint.h>
+
+#ifndef TRUE
+  #define TRUE  (1U)
+  #define FALSE (0U)
+#endif
+
+#ifndef ENABLE
+  #define ENABLE  (1U)
+  #define DISABLE (0U)
+#endif
 
 #define SET (1U)
 #define CLR (0U)
 
 #define BYTE_MSK (0xFFU)
 
-typedef uint8_t  u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef uint64_t u64;
+typedef unsigned char     u8;
+typedef unsigned short    u16;
+typedef unsigned int      u32;
+typedef unsigned long int u64;
 
-typedef int8_t  s8;
-typedef int16_t s16;
-typedef int32_t s32;
-typedef int64_t s64;
+typedef signed char       s8;
+typedef signed short      s16;
+typedef signed int        s32;
+typedef signed long int   s64;
 
 typedef volatile u32 reg32;
 

@@ -10,7 +10,7 @@
 #define GPIO_CFG_H_
 
 #define GPIO_CFG_SHIFT (8U)
-#define GPIO_CFG_MASK (0x0F)
+#define GPIO_CFG_MASK  (0x0F)
 
 enum GPIO_FSEL_e {
   GPIO_FSEL_Input = 0,
@@ -36,16 +36,16 @@ enum GPIO_FSEL_e {
 #define GPIO_GET_PIN_CFG(GPIO) ((GPIO) & (GPIO_CFG_MASK))
 
 // Default Cfg
-#define GPIO0  ((0U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
-#define GPIO1  ((1U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
-#define GPIO2  ((2U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
-#define GPIO3  ((3U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
-#define GPIO4  ((4U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
-#define GPIO5  ((5U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
-#define GPIO6  ((6U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
-#define GPIO7  ((7U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
-#define GPIO8  ((8U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
-#define GPIO9  ((9U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
+#define GPIO0  (( 0U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
+#define GPIO1  (( 1U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
+#define GPIO2  (( 2U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
+#define GPIO3  (( 3U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
+#define GPIO4  (( 4U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
+#define GPIO5  (( 5U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
+#define GPIO6  (( 6U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
+#define GPIO7  (( 7U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
+#define GPIO8  (( 8U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
+#define GPIO9  (( 9U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
 #define GPIO10 ((10U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
 #define GPIO11 ((11U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)
 #define GPIO12 ((12U << GPIO_CFG_SHIFT) | GPIO_FSEL_IN)

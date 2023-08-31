@@ -1,13 +1,34 @@
+/*******************************************************************************
+ * Copyright (C) 2023 by Salvador Z                                            *
+ *                                                                             *
+ * This file is part of RPitoS                                                 *
+ *                                                                             *
+ *   Permission is hereby granted, free of charge, to any person obtaining a   *
+ *   copy of this software and associated documentation files (the Software)   *
+ *   to deal in the Software without restriction including without limitation  *
+ *   the rights to use, copy, modify, merge, publish, distribute, sublicense,  *
+ *   and/or sell copies ot the Software, and to permit persons to whom the     *
+ *   Software is furnished to do so, subject to the following conditions:      *
+ *                                                                             *
+ *   The above copyright notice and this permission notice shall be included   *
+ *   in all copies or substantial portions of the Software.                    *
+ *                                                                             *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS   *
+ *   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARANTIES OF MERCHANTABILITY *
+ *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL   *
+ *   THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR      *
+ *   OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,     *
+ *   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE        *
+ *   OR OTHER DEALINGS IN THE SOFTWARE.                                        *
+ ******************************************************************************/
+
 /**
  * @file mini_uart.c
  * @author Salvador Z
- * @version 1.0
- * @brief File for mini UART
+ * @date 30 Aug 2023
+ * @brief File for mini_uart impl
  *
  */
-
-#ifndef MINI_UART_C_
-#define MINI_UART_C_
 
 // Includes
 #include "utils.h"
@@ -26,9 +47,9 @@ void mini_uart_init() {
   // Disable receive and transmit interrupts
   AUX_REG_MAP->AUX_MU_IER = CLR;
   // Enable 8 bit mode
-  AUX_REG_MAP->AUX_MU_LCR  = SET_FLD_REG(AUX_REG_MAP->AUX_MU_LCR, mUART_8BIT_MODE, 0);
+  AUX_REG_MAP->AUX_MU_LCR = SET_FLD_REG(AUX_REG_MAP->AUX_MU_LCR, mUART_8BIT_MODE, 0);
   // UART1_RTS line is high
-  AUX_REG_MAP->AUX_MU_MCR  = CLR;
+  AUX_REG_MAP->AUX_MU_MCR = CLR;
   // Set the Baud Rate
   AUX_REG_MAP->AUX_MU_BAUD = BAUD_RATE_REG_16B;
   // UART TX and RX Enable (Enabled by default after reset)
@@ -40,16 +61,15 @@ void mini_uart_init() {
 }
 
 void mini_uart_send(char c) {
-  // @TODO Change blocking method: Polling
+  // TODO(Change blocking method: Polling)
   while (!(AUX_REG_MAP->AUX_MU_LSR & mUART_TX_READY));
 
   // Transmit data
   AUX_REG_MAP->AUX_MU_IO = c;
-
 }
 
 char mini_uart_recv() {
-  // @TODO Change blocking method: Polling
+  // TODO(Change blocking method: Polling)
   while (!(AUX_REG_MAP->AUX_MU_LSR & mUART_RX_READY));
 
   // Receive data
@@ -66,5 +86,3 @@ void mini_uart_send_string(char *str) {
     ++str;
   }
 }
-
-#endif /* MINI_UART_C_ */
