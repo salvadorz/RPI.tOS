@@ -33,6 +33,8 @@
 #include "common.h"
 #include "mini_uart.h"
 #include "stdio.h"
+#include "rpi_cfg.h"
+#include "utils.h" // get_proc_id
 
 int kernel_main() {
 
@@ -48,3 +50,37 @@ int kernel_main() {
 
   return 0;
 }
+
+#if MULTICORE
+
+static u32 sem = 0;
+
+int kernel_multi_main() {
+
+  u32 const proc_id = get_proc_id();
+
+  if (0 == proc_id) {
+    mini_uart_init();
+    // printf init
+    init_printf(0, putc);
+    printf("Rasperry PI %d Bare Metal OS Initializing...\n", RPI_VERSION);
+  }
+
+  // Wait for prev Core to print
+  while(proc_id != sem){;}
+
+  printf("Core %d running...", proc_id);
+  ++sem;
+
+  if (CORE0 == proc_id) {
+    while (CORE_MAX != sem) {;}
+
+    while (1) {
+      // echo
+      printf("%c", mini_uart_recv());
+    }
+  }
+
+  return 0;
+}
+#endif
