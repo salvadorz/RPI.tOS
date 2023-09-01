@@ -14,4 +14,6 @@
   * External Registers by Offset
   * Registers by Functional Group
 
+* Arm Architecture Reference Manual for A-Profile ([J.a](Armv8-A-profile_architecture_reference_manual.pdf "Armv8-A Architecture Reference Manual for A-profile architecture")) - ([Online](https://developer.arm.com/documentation/ddi0487/ja/?lang=en "Arm Architecture Reference Manual for A-profile architecture"))
+
 * Arm Application Note 527: Bare-metal Boot Code for ARMv8-A Processors ([Version: 1.0](Arm_AP527_Bare-metal_boot_code_for_ARMv8-A_processors.pdf "Bare-metal Boot Code for ARMv8-A Processors"))
