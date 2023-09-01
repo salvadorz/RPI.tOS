@@ -9,5 +9,7 @@ uart_2ndstage=1
 # To avoid interfere uart_2ndstage with BT, redirect to the other UART
 dtoverlay=miniuart-bt
 
+armstub=armstub-new.bin
+
 [pi4]
 kernel=kernel8-rpi4.img

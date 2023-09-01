@@ -1,4 +1,4 @@
 boot/**
-build/**
+**/build/**
 *.d
 *.o

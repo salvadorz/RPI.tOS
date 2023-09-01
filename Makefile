@@ -57,3 +57,12 @@ else
 	rsync -av kernel8.img $(BOOTMNT)/kernel8.img
 endif
 	rsync -av config.txt $(BOOTMNT)/config.txt
+
+armstub/build/armstub_s.o: armstub/src/armstub.S
+	mkdir -p $(@D)
+	$(GCC) $(CFLAGS) -MMD -c $< -o $@
+
+armstub: armstub/build/armstub_s.o
+	$(ARMGNU)ld --section-start=.text=0 -o armstub/build/armstub.elf armstub/build/armstub_s.o
+	$(ARMGNU)objcopy armstub/build/armstub.elf -O binary armstub-new.bin
+	rsync -av armstub-new.bin $(BOOTMNT)/armstub-new.bin
