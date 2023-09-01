@@ -1,5 +1,6 @@
 #include "rpi_cfg.h"
 #include "mm.h"
+#include "arm/sys_cfg.h"
 
 #if (!MULTICORE)
 
@@ -11,12 +12,37 @@ _start:
     mrs x0, mpidr_el1
     // Mask last byte. Aff0 field Affinity level 0
     and x0, x0, #0xFF
-    // if 0 (Core 0) jump to do bss_init
-    cbz x0, bss_init
+    // if 0 (Core 0) jump to do el_cfg (exception level cfg)
+    cbz x0, el_cfg
     // jump to proc_hang otherwise
     b proc_hang
 
-bss_init:
+// System in EL3 Secure State, Core 0 Cfg EL1
+el_cfg:
+    // Wr sctrl_el1 with SCTLR_EL1_REG_CFG
+    ldr x0, =SCTLR_EL1_REG_CFG
+    msr sctlr_el1, x0
+
+    // Wr hcr_el2 with HCR_EL2_REG_CFG
+    ldr x0, =HCR_EL2_REG_CFG
+    msr hcr_el2, x0
+
+    // Wr scr_el3 with SCR_EL3_REG_CFG
+    ldr x0, =SCR_EL3_REG_CFG
+    msr scr_el3, x0
+
+    // Wr spsr_el3 with SPSR_REG_CFG
+    ldr x0, =SPSR_REG_CFG
+    msr spsr_el3, x0
+
+    // store in elr_el3 the address jump to
+    adr x0, el1_entry
+    msr elr_el3, x0
+
+    // jump to el1 (restores processor state from SPSR_EL3)
+    eret
+
+el1_entry:
     // arg src from memzero
     adr x0, bss_begin
     // load the end pox from bss to calculate the length
@@ -26,7 +52,6 @@ bss_init:
     // call memzero
     bl memzero
 
-master:
     mov sp, #LOW_MEMORY
     bl kernel_main
     // Should not reach here
@@ -36,7 +61,7 @@ proc_hang:
     // wait for event
     wfe
     b proc_hang
-
+//----------------------------SINGLE CORE-----------------------/
 #else
 
 .data
@@ -51,8 +76,8 @@ _start:
     mrs x0, mpidr_el1
     // Mask last byte. Aff0 field Affinity level 0
     and x0, x0, #0xFF
-    // if 0 (Core 0) jump to do bss_init
-    cbz x0, bss_init
+    // if 0 (Core 0) jump to do el_cfg (exception level cfg)
+    cbz x0, el_cfg
     // jump to wait otherwise
     b wait
 
@@ -69,7 +94,32 @@ wait:
     // else
 	b wait
 
-bss_init:
+// System in EL3 Secure State, Core 0 Cfg EL1
+el_cfg:
+    // Wr sctlr_el1 with SCTLR_EL1_REG_CFG
+    ldr x0, =SCTLR_EL1_REG_CFG
+    msr sctlr_el1, x0
+
+    // Wr hcr_el2 with HCR_EL2_REG_CFG
+    ldr x0, =HCR_EL2_REG_CFG
+    msr hcr_el2, x0
+
+    // Wr scr_el3 with SCR_EL3_REG_CFG
+    ldr x0, =SCR_EL3_REG_CFG
+    msr scr_el3, x0
+
+    // Wr spsr_el3 with SPSR_REG_CFG
+    ldr x0, =SPSR_REG_CFG
+    msr spsr_el3, x0
+
+    // store in elr_el3 the address jump to
+    adr x0, el1_entry
+    msr elr_el3, x0
+
+    // jump to el1 (restores processor state from SPSR_EL3)
+    eret
+
+el1_entry:
     // arg src from memzero
     adr x0, bss_begin
     // load the end pox from bss to calculate the length

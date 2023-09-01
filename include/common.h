@@ -16,8 +16,8 @@
 #endif
 
 #ifndef ENABLE
-  #define ENABLE  (1U)
-  #define DISABLE (0U)
+  #define ENABLED (1)
+  #define DISABLE (0)
 #endif
 
 #define SET (1U)
@@ -25,6 +25,7 @@
 
 #define BYTE_MSK (0xFFU)
 
+#ifndef __ASSEMBLER__
 typedef unsigned char     u8;
 typedef unsigned short    u16;
 typedef unsigned int      u32;
@@ -36,5 +37,6 @@ typedef signed int        s32;
 typedef signed long int   s64;
 
 typedef volatile u32 reg32;
+#endif
 
 #endif /* COMMON_H_ */
