@@ -20,24 +20,24 @@ _start:
 // System in EL3 Secure State, Core 0 Cfg EL1
 el_cfg:
     // Wr sctrl_el1 with SCTLR_EL1_REG_CFG
-    ldr x0, =SCTLR_EL1_REG_CFG
-    msr sctlr_el1, x0
+    ldr x0, =SCTLR_EL1_REG_CFG // Lendian, No Caches (I/D) and No MMU
+    msr sctlr_el1, x0          // Cfg processor parameters when operates at EL1
 
     // Wr hcr_el2 with HCR_EL2_REG_CFG
-    ldr x0, =HCR_EL2_REG_CFG
-    msr hcr_el2, x0
+    ldr x0, =HCR_EL2_REG_CFG  // Execution state AArch64 mode
+    msr hcr_el2, x0           // Hypervisor Cfg Reg
 
     // Wr scr_el3 with SCR_EL3_REG_CFG
-    ldr x0, =SCR_EL3_REG_CFG
+    ldr x0, =SCR_EL3_REG_CFG  // Non-secure state from EL2-0 and AArch64 lower level
     msr scr_el3, x0
 
     // Wr spsr_el3 with SPSR_REG_CFG
-    ldr x0, =SPSR_REG_CFG
-    msr spsr_el3, x0
+    ldr x0, =SPSR_REG_CFG    // Masking ISR and dedicated SP for EL1
+    msr spsr_el3, x0         // Prepare (manually) processor state. 
 
     // store in elr_el3 the address jump to
-    adr x0, el1_entry
-    msr elr_el3, x0
+    adr x0, el1_entry        // Prepare the jump to label
+    msr elr_el3, x0          // Exception Link Register (EL3)
 
     // jump to el1 (restores processor state from SPSR_EL3)
     eret

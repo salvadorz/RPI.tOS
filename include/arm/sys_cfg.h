@@ -13,15 +13,15 @@
 #include "common.h"
 
 /***** /
- * AArch64 Exception Level and selected Stack Pointer
+ * AArch64 Exception Level and selected Stack Pointer (t):thread or (h):hypervisor
  *****/
-#define EL0t (0)
-#define EL1t (4)
-#define EL1h (5)
-#define EL2t (8)
-#define EL2h (9)
-#define EL3t (12)
-#define EL3h (13)
+#define M_EL0t    (0)   /* Exception level M[3:2] (0 << 2) | M[0]0 (t)*/
+#define M_EL1t    (4)   /* Exception level M[3:2] (1 << 2) | M[0]0 (t)*/
+#define M_EL1h    (5)   /* Exception level M[3:2] (1 << 2) | M[0]1 (h)*/
+#define M_EL2t    (8)   /* Exception level M[3:2] (2 << 2) | M[0]0 (t)*/
+#define M_EL2h    (9)   /* Exception level M[3:2] (2 << 2) | M[0]1 (h)*/
+#define M_EL3t    (12)  /* Exception level M[3:2] (3 << 2) | M[0]0 (t)*/
+#define M_EL3h    (13)  /* Exception level M[3:2] (3 << 2) | M[0]1 (h)*/
 //****/
 
 #define RSRVD1    (ENABLED) // When XXXX is not Implemented
@@ -34,7 +34,8 @@
 #define AARCH64   (ENABLED) // The Execution state for EL1 is AArch64
 #define SECURE_ST (ENABLED) // If Enable EL2-0 are in Non-Secure State. Disable indicates EL0-EL1 are in Secure State
 #define IRQ_MASK  (ENABLED) // Interrupt Mask. Set to the value of PSTATE.x bit on taking the exception to EL3
-#define SPSR_M_SP (EL1h)    // Exception Level and Stack Pointer Selected
+#define SPSR_EL1  (M_EL1h)  // Exception Level and Stack Pointer Selected
+#define SPSR_EL2  (M_EL2h)  // Exception Level and Stack Pointer Selected
 
 #if L_ENDIAN
   #define EE_CFG (0)
@@ -57,9 +58,9 @@
 #define SCTLR_EIS_CFG  (RSRVD1 << 22)  // Exception Entry is Context Sync
 #define SCTLR_TSCXT    (RSRVD1 << 20)  // Trap EL0 Access to SCXTNUM_EL0 register
 #define SCTLR_EOS_CFG  (RSRVD1 << 11)  // Exception Exit is Context Synchronizing.
-#define SCTLR_I_CACHE  (I_CACHE << 12) // Stage 1 instruction access Cacheability control, for accesses at EL0 and EL1
-#define SCTLR_D_CACHE  (D_CACHE << 2)
-#define SCTLR_MMU_CFG  (MMU_CFG << 0)
+#define SCTLR_I_CACHE  (I_CACHE<< 12)  // Stage 1 instruction access Cacheability control, for accesses at EL0 and EL1
+#define SCTLR_D_CACHE  (D_CACHE<<  2)
+#define SCTLR_MMU_CFG  (MMU_CFG<<  0)
 
 #define SCTLR_EL1_REG_CFG                                                                        \
   (SCTLR_LSMAOE | SCTLR_nTLSMD | SCTLR_EE_CFG | SCTLR_EOE_CFG | SCTLR_SPAN_CFG | SCTLR_EIS_CFG | \
@@ -80,7 +81,7 @@
 // ***************************************
 
 #define SCR_RESERVED     (RSRVD1 << 5 | RSRVD1 << 4)
-#define SCR_RW_CFG       (AARCH64 << 10) // The next lower level is AArch64 AArch32 Otherwise
+#define SCR_RW_CFG       (AARCH64 << 10) // The next lower level is AArch64, AArch32 Otherwise
 #define SCR_NS_CFG       (SECURE_ST<< 0) // If Non-Secure State, mem access cannot access Secure Memory
 #define SCR_EL3_REG_CFG  (SCR_RESERVED | SCR_RW_CFG | SCR_NS_CFG)
 
@@ -93,8 +94,10 @@
   #define SPSR_IRQ      (IRQ_MASK << 7)
   #define SPSR_FIQ      (IRQ_MASK << 6)
   #define SPSR_MASK_ALL (SPSR_ASE | SPSR_IRQ | SPSR_FIQ)
-  #define SPSR_M_SP_CFG (SPSR_M_SP<< 0)
-  #define SPSR_REG_CFG  (SPSR_MASK_ALL | SPSR_M_SP_CFG)
+  #define SPSR_M_SP_EL1 (SPSR_EL1 << 0)
+  #define SPSR_M_SP_EL2 (SPSR_EL2 << 0)
+  #define SPSR_REG_EL1  (SPSR_MASK_ALL | SPSR_M_SP_EL1)
+  #define SPSR_REG_EL2  (SPSR_MASK_ALL | SPSR_M_SP_EL2)
 
 #else
 // TODO(Implement Behaviour for AARCH32 State(Mode))
