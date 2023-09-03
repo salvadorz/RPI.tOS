@@ -48,23 +48,50 @@
 // Provides top level control of the system, including its memory system, at EL1 and EL0.
 // ***************************************
 
-#define SCTLR_LSMAOE   (RSRVD1 << 29) // Load Multiple and Store Multiple Atomicity and Ordering Enable.
-#define SCTLR_nTLSMD   (RSRVD1 << 28) // No Trap Load Multiple and Store Multiple to Device-nGRE/nGnRE/nGnRnE mem
+#define SCTLR_LSMAOE_EL1   (RSRVD1 << 29) // Load Multiple and Store Multiple Atomicity and Ordering Enable.
+#define SCTLR_nTLSMD_EL1   (RSRVD1 << 28) // No Trap Load Multiple and Store Multiple to Device-nGRE/nGnRE/nGnRnE mem
 
-#define SCTLR_EE_CFG   (EE_CFG << 25)
-#define SCTLR_EOE_CFG  (EE_CFG << 24)
+#define SCTLR_EE_CFG_EL1   (EE_CFG << 25)
+#define SCTLR_EOE_CFG_EL1  (EE_CFG << 24)
 
-#define SCTLR_SPAN_CFG (RSRVD1 << 23)  // Set Privileged Access Never on taking an exception to EL1
-#define SCTLR_EIS_CFG  (RSRVD1 << 22)  // Exception Entry is Context Sync
-#define SCTLR_TSCXT    (RSRVD1 << 20)  // Trap EL0 Access to SCXTNUM_EL0 register
-#define SCTLR_EOS_CFG  (RSRVD1 << 11)  // Exception Exit is Context Synchronizing.
-#define SCTLR_I_CACHE  (I_CACHE<< 12)  // Stage 1 instruction access Cacheability control, for accesses at EL0 and EL1
-#define SCTLR_D_CACHE  (D_CACHE<<  2)
-#define SCTLR_MMU_CFG  (MMU_CFG<<  0)
+#define SCTLR_SPAN_CFG_EL1 (RSRVD1 << 23)  // Set Privileged Access Never on taking an exception to EL1
+#define SCTLR_EIS_CFG_EL1  (RSRVD1 << 22)  // Exception Entry is Context Sync
+#define SCTLR_TSCXT_EL1    (RSRVD1 << 20)  // Trap EL0 Access to SCXTNUM_EL0 register
+#define SCTLR_EOS_CFG_EL1  (RSRVD1 << 11)  // Exception Exit is Context Synchronizing.
+#define SCTLR_I_CACHE_EL1  (I_CACHE<< 12)  // Stage 1 instruction access Cacheability control, for accesses at EL0 and EL1
+#define SCTLR_D_CACHE_EL1  (D_CACHE<<  2)
+#define SCTLR_MMU_CFG_EL1  (MMU_CFG<<  0)
 
-#define SCTLR_EL1_REG_CFG                                                                        \
-  (SCTLR_LSMAOE | SCTLR_nTLSMD | SCTLR_EE_CFG | SCTLR_EOE_CFG | SCTLR_SPAN_CFG | SCTLR_EIS_CFG | \
-    SCTLR_TSCXT | SCTLR_EOS_CFG | SCTLR_I_CACHE | SCTLR_D_CACHE | SCTLR_MMU_CFG)
+#define SCTLR_EL1_REG_CFG                                                                                              \
+  (SCTLR_LSMAOE_EL1 | SCTLR_nTLSMD_EL1 | SCTLR_EE_CFG_EL1 | SCTLR_EOE_CFG_EL1 | SCTLR_SPAN_CFG_EL1 | SCTLR_EIS_CFG_EL1 \
+  | SCTLR_TSCXT_EL1 | SCTLR_EOS_CFG_EL1 | SCTLR_I_CACHE_EL1 | SCTLR_D_CACHE_EL1 | SCTLR_MMU_CFG_EL1)
+
+// ***************************************
+// SCTLR_EL2, System Control Register (EL2), Pg. 1512 Arch Registers / Pg. 6972 of AArch64-Reference-Manual.
+// Provides top level control of the system, including its memory system, at EL1 and EL0.
+// ***************************************
+
+#define SCTLR_LSMAOE_EL2   (RSRVD1 << 29) // Load Multiple and Store Multiple Atomicity and Ordering Enable.
+#define SCTLR_nTLSMD_EL2   (RSRVD1 << 28) // No Trap Load Multiple and Store Multiple to Device-nGRE/nGnRE/nGnRnE mem
+
+#define SCTLR_EE_CFG_EL2   (EE_CFG << 25)
+#define SCTLR_EOE_CFG_EL2  (EE_CFG << 24)
+
+#define SCTLR_SPAN_CFG_EL2 (RSRVD1 << 23)  // Set Privileged Access Never on taking an exception to EL1
+#define SCTLR_EIS_CFG_EL2  (RSRVD1 << 22)  // Exception Entry is Context Sync
+#define SCTLR_TSCXT_EL2    (RSRVD0 << 20)  // Trap EL0 Access to SCXTNUM_EL0 register
+#define SCTLR_TWE_CFG_EL2  (RSRVD1 << 18)  // Traps execution of WFE instructions at EL0 to EL2, from both EXPCN states.
+#define SCTLR_TWI_CFG_EL2  (RSRVD1 << 16)  // Traps execution of WFI instructions at EL0 to EL2, from both EXPCN states.
+#define SCTLR_EOS_CFG_EL2  (RSRVD1 << 11)  // Exception Exit is Context Synchronizing.
+#define SCTLR_I_CACHE_EL2  (I_CACHE<< 12)  // Stage 1 instruction access Cacheability ctrl, for accesses at EL0 and EL1
+#define SCTLR_D_CACHE_EL2  (D_CACHE<<  2)
+#define SCTLR_MMU_CFG_EL2  (MMU_CFG<<  0)
+
+#define SCTLR_EL2_RSRVD1                                                                                               \
+  (SCTLR_LSMAOE_EL2 | SCTLR_nTLSMD_EL2 | SCTLR_SPAN_CFG_EL2 | SCTLR_EIS_CFG_EL2 | SCTLR_TWE_CFG_EL2 | SCTLR_TWI_CFG_EL2)
+#define SCTLR_EL2_REG_CFG                                                                            \
+  (SCTLR_EL2_RSRVD1 | SCTLR_EE_CFG_EL2 | SCTLR_EOE_CFG_EL2 | SCTLR_EOS_CFG_EL2 | SCTLR_I_CACHE_EL2 | \
+   SCTLR_D_CACHE_EL2 | SCTLR_MMU_CFG_EL2)
 
 // ***************************************
 // HCR_EL2, Hypervisor Configuration Register (EL2), Pg. 703 Arch Registers / Pg 6617 of AArch64-Reference-Manual.

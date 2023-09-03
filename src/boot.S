@@ -17,8 +17,12 @@ _start:
     // jump to proc_hang otherwise
     b proc_hang
 
-// System in EL3 Secure State, Core 0 Cfg EL1
+// System in EL3 Secure State, Core 0 Cfg EL2
 el_cfg:
+    // Wr sctlr_el2 with SCTLR_EL2_REG_CFG
+    ldr x0, =SCTLR_EL2_REG_CFG // Lendian, No Caches (I/D) and No MMU
+    msr sctlr_el2, x0          // Cfg processor parameters when operates at EL2
+
     // Wr sctrl_el1 with SCTLR_EL1_REG_CFG
     ldr x0, =SCTLR_EL1_REG_CFG // Lendian, No Caches (I/D) and No MMU
     msr sctlr_el1, x0          // Cfg processor parameters when operates at EL1
@@ -31,18 +35,18 @@ el_cfg:
     ldr x0, =SCR_EL3_REG_CFG  // Non-secure state from EL2-0 and AArch64 lower level
     msr scr_el3, x0
 
-    // Wr spsr_el3 with SPSR_REG_CFG
-    ldr x0, =SPSR_REG_CFG    // Masking ISR and dedicated SP for EL1
+    // Wr spsr_el3 with SPSR_REG_EL2
+    ldr x0, =SPSR_REG_EL2    // Masking ISR and dedicated SP for EL2
     msr spsr_el3, x0         // Prepare (manually) processor state. 
 
     // store in elr_el3 the address jump to
-    adr x0, el1_entry        // Prepare the jump to label
+    adr x0, el2_entry        // Prepare the jump to label
     msr elr_el3, x0          // Exception Link Register (EL3)
 
-    // jump to el1 (restores processor state from SPSR_EL3)
+    // jump to el2 (restores processor state from SPSR_EL3)
     eret
 
-el1_entry:
+el2_entry:
     // arg src from memzero
     adr x0, bss_begin
     // load the end pox from bss to calculate the length
@@ -52,6 +56,23 @@ el1_entry:
     // call memzero
     bl memzero
 
+    mov sp, #LOW_MEMORY
+    bl kernel_init
+    
+    // sctlr_el1 already in place
+
+    // Wr spsr_el2 with SPSR_REG_EL1
+    ldr x0, =SPSR_REG_EL1    // Masking ISR and dedicated SP for EL1
+    msr spsr_el2, x0         // Prepare (manually) processor state. 
+
+    // store in elr_el2 the address jump to
+    adr x0, el1_entry        // Prepare the jump to label
+    msr elr_el2, x0          // Exception Link Register (EL2)
+
+    // jump to el1 (restores processor state from SPSR_EL2)
+    eret
+
+el1_entry:
     mov sp, #LOW_MEMORY
     bl kernel_main
     // Should not reach here
@@ -96,6 +117,10 @@ wait:
 
 // System in EL3 Secure State, Core 0 Cfg EL1
 el_cfg:
+    // Wr sctlr_el2 with SCTLR_EL2_REG_CFG
+    ldr x0, =SCTLR_EL2_REG_CFG // Lendian, No Caches (I/D) and No MMU
+    msr sctlr_el2, x0          // Cfg processor parameters when operates at EL2
+
     // Wr sctlr_el1 with SCTLR_EL1_REG_CFG
     ldr x0, =SCTLR_EL1_REG_CFG
     msr sctlr_el1, x0
@@ -108,18 +133,18 @@ el_cfg:
     ldr x0, =SCR_EL3_REG_CFG
     msr scr_el3, x0
 
-    // Wr spsr_el3 with SPSR_REG_CFG
-    ldr x0, =SPSR_REG_CFG
+    // Wr spsr_el3 with SPSR_REG_EL2
+    ldr x0, =SPSR_REG_EL2  // Masking ISR and dedicated SP for EL2
     msr spsr_el3, x0
 
     // store in elr_el3 the address jump to
-    adr x0, el1_entry
+    adr x0, el2_entry
     msr elr_el3, x0
 
-    // jump to el1 (restores processor state from SPSR_EL3)
+    // jump to el2 (restores processor state from SPSR_EL3)
     eret
 
-el1_entry:
+el2_entry:
     // arg src from memzero
     adr x0, bss_begin
     // load the end pox from bss to calculate the length
@@ -129,6 +154,21 @@ el1_entry:
     // call memzero
     bl memzero
 
+    mov sp, #LOW_MEMORY
+    bl kernel_init
+
+    // sctlr_el1 already in place
+
+    ldr x0, =SPSR_REG_EL1 // Masking ISR and dedicated SP for EL1
+    msr spsr_el2, x0      // Prepare (manually) processor state
+
+    // store in elr_el2 the address jump to
+    adr x0, el1_entry     // Prepare the jump to label
+    msr elr_el2, x0       // Exception Link Register (EL2)
+
+    eret                  // jump to el1
+
+el1_entry:
 	// Tell other Cores BSS is ready
 	mov w0, #1 //uint8_t free = 1
     // *barrier = free

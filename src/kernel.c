@@ -36,12 +36,16 @@
 #include "rpi_cfg.h"
 #include "utils.h" // get_proc_id
 
-int kernel_main() {
 
+void kernel_init() {
+  // uart_pl011_init();
   mini_uart_init();
   init_printf(0, putc);
-
+  // System is in Hypervisor Exception level
   printf("Rasperry PI %d Bare Metal OS Initializing...\n", RPI_VERSION);
+}
+
+int kernel_main() {
 
   while (1) {
     // echo
@@ -59,17 +63,10 @@ int kernel_multi_main() {
 
   u32 const proc_id = get_proc_id();
 
-  if (0 == proc_id) {
-    mini_uart_init();
-    // printf init
-    init_printf(0, putc);
-    printf("Rasperry PI %d Bare Metal OS Initializing...\n", RPI_VERSION);
-  }
-
   // Wait for prev Core to print
   while(proc_id != sem){;}
 
-  printf("Core %d running...", proc_id);
+  printf("Core %d running...\n", proc_id);
   ++sem;
 
   if (CORE0 == proc_id) {
