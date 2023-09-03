@@ -133,6 +133,10 @@ el_cfg:
     ldr x0, =SCR_EL3_REG_CFG
     msr scr_el3, x0
 
+    // Cfg the Float-P to avoid trap If cfg
+    // ldr	x0, =CPACR_REG_CFG
+	// msr	cpacr_el1, x0
+
     // Wr spsr_el3 with SPSR_REG_EL2
     ldr x0, =SPSR_REG_EL2  // Masking ISR and dedicated SP for EL2
     msr spsr_el3, x0

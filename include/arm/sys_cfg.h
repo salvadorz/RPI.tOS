@@ -24,6 +24,14 @@
 #define M_EL3h    (13)  /* Exception level M[3:2] (3 << 2) | M[0]1 (h)*/
 //****/
 
+/***** /
+ * AArch64 Floating point Cfg
+ *****/
+#define FP_NO_TRAP_EL3 (0)  /* Execution of these instructions at EL1 and EL0 to be trapped*/
+#define FP_NO_TRAP_EL1 (1)  /* Execution of these instructions at EL0 to be trapped*/
+#define FP_NO_TRAP_EL0 (3)  /* Does not cause execution of any instructions to be trapped*/
+//****/
+
 #define RSRVD1    (ENABLED) // When XXXX is not Implemented
 #define RSRVD0    (DISABLE) // When XXXX is not Implemented
 
@@ -111,6 +119,13 @@
 #define SCR_RW_CFG       (AARCH64 << 10) // The next lower level is AArch64, AArch32 Otherwise
 #define SCR_NS_CFG       (SECURE_ST<< 0) // If Non-Secure State, mem access cannot access Secure Memory
 #define SCR_EL3_REG_CFG  (SCR_RESERVED | SCR_RW_CFG | SCR_NS_CFG)
+
+// ***************************************
+// CPACR_EL1, Architectural Feature Access Control Register (EL3) Pg. 296 Arch Registers / Pg. 6407 of AArch64-Ref M.
+// Controls access to trace, SVE, and Advanced SIMD and floating-point functionality.
+// ***************************************
+#define CPACR_FP_EN     (FP_NO_TRAP_EL0 << 20)
+#define CPACR_REG_CFG   (CPACR_FP_EN)
 
 // ***************************************
 // SPSR_EL3, Saved Program Status Register (EL3) Pg. 1606 Arch Registers / Pg. 819 of AArch64-Reference-Manual.
