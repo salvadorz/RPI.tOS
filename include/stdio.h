@@ -25,13 +25,4 @@
   */
 void putc(void *p, char c);
 
-void putc(void *p, char c) {
-  (void)p;
-  if (c == '\n') {
-    output_char('\r');
-  }
-
-  output_char(c);
-}
-
 #endif /* STDIO_H_ */

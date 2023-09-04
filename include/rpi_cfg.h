@@ -10,7 +10,7 @@
 #define RPI_CFG_H_
 
 #ifndef MULTICORE
-  #define MULTICORE (1U)
+  #define MULTICORE (0U)
 #endif
 #define CORE0     (0U)
 #define CORE1     (1U)

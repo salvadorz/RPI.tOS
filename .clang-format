@@ -135,7 +135,7 @@ BreakConstructorInitializers: BeforeColon
 BreakAfterJavaFieldAnnotations: false
 # Allow breaking string literals when formatting.
 BreakStringLiterals: true
-ColumnLimit:     100                                                 # Change from 80
+ColumnLimit:     120                                                 # Change from 80
 CommentPragmas:  '^ IWYU pragma:'
 # If true, consecutive namespace declarations will be on the same line.
 # If false, each namespace is declared on a new line.

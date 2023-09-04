@@ -2,4 +2,4 @@
 
 > RPI tiny OS
 
-Small RTOS using ARMv7-A
+Small RTOS using ARMv8-A

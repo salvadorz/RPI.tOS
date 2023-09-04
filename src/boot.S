@@ -87,7 +87,7 @@ proc_hang:
 
 .data
 barrier:    .byte 0  // uint_8 barrier=0
-            .align 2 // Align 4 bytes 
+            .align 2 // Align 4 bytes (2^2=4)
 
 .section ".text.boot"
 
