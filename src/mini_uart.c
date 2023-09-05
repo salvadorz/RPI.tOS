@@ -31,9 +31,9 @@
  */
 
 // Includes
-#include "utils.h"
 #include "mini_uart.h"
 #include "peripherals/aux_reg.h"
+#include "utils.h"
 
 void mini_uart_init() {
   gpio_pin_set_func(GPIO_GET_PIN_NUM(TXD1), GPIO_GET_PIN_CFG(TXD1));
@@ -44,8 +44,8 @@ void mini_uart_init() {
 
   // AUXENB :MiniUart Enable
   AUX_REG_MAP->AUX_ENABLES = SET_BIT_POX(0);
-  // Disable receive and transmit interrupts
-  AUX_REG_MAP->AUX_MU_IER = CLR;
+  // Enable receive and disable transmit interrupts
+  AUX_REG_MAP->AUX_MU_IER = mUART_RX_IRQ_EN;
   // Enable 8 bit mode
   AUX_REG_MAP->AUX_MU_LCR = SET_FLD_REG(AUX_REG_MAP->AUX_MU_LCR, mUART_8BIT_MODE, 0);
   // UART1_RTS line is high
@@ -84,5 +84,12 @@ void mini_uart_send_string(char *str) {
     }
     mini_uart_send(*str);
     ++str;
+  }
+}
+
+void mini_uart_irq_handler(void) {
+  while (mUART_RX_IRQ_ST == (AUX_REG_MAP->AUX_MU_IIR & mUART_RX_IRQ_ST)) {
+    mini_uart_send(mini_uart_recv());
+    AUX_REG_MAP->AUX_MU_IIR |= mUART_RX_IRQ_ST; // Clear the fifo
   }
 }

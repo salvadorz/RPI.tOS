@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (C) 2023 by Salvador Z                                            *
  *                                                                             *
- * This file is part of RPitOS                                                 *
+ * This file is part of RPI_tOS                                                *
  *                                                                             *
  *   Permission is hereby granted, free of charge, to any person obtaining a   *
  *   copy of this software and associated documentation files (the Software)   *
@@ -22,72 +22,67 @@
  *   OR OTHER DEALINGS IN THE SOFTWARE.                                        *
  ******************************************************************************/
 
-/**
- * @file kernel.c
+ /**
+ * @file irq.c
  * @author Salvador Z
- * @date 27 Aug 2023
- * @brief File for kernel
- *
+ * @date 03 Sep 2023
+ * @brief File for irq Impl
  */
 
-#include "common.h"
-#include "mini_uart.h"
+#include "entry.h"
 #include "irq.h"
-#include "rpi_cfg.h"
 #include "stdio.h"
 #include "sys_timer.h"
-//#include "uart_pl011.h"
-#include "utils.h" // get_proc_id
-
-void kernel_init() {
-  // uart_pl011_init();
-  mini_uart_init();
-  init_printf(0, putc);
-  // System is in Hypervisor Exception level
-  printf("Rasperry PI %d Bare Metal OS Initializing", RPI_VERSION);
-  irq_vectors_init(); // Registers entries for the Vector table
-  printf(".");
-  sys_timer_init();
-  printf(".");
-  irq_interrupt_controller_enable(); // Registers (IRQs) Peripherals in the IRQ Controller
-  printf(".");
-  irq_enable(); // Enable Interrups
-  printf("\n");
-}
-
-int kernel_main() {
-
-  while (1) {
-    // echo in ISR
-    ;
-  }
-
-  return 0;
-}
-
-#if MULTICORE
-
-static u32 sem = 0;
-
-int kernel_multi_main() {
-
-  u32 const proc_id = get_proc_id();
-
-  // Wait for prev Core to print
-  while(proc_id != sem){;}
-
-  printf("Core %d running...\n", proc_id);
-  ++sem;
-
-  if (CORE0 == proc_id) {
-    while (CORE_MAX != sem) {;}
-
-    while (1) {
-      // echo in ISR
-      ;
-    }
-  }
-
-  return 0;
-}
+#if (RPI_VERSION == 4)
+  #include "peripherals/irq_reg_bcm2711.h"
+#else
+  #include "peripherals/irq_reg_bcm283x.h"
 #endif
+
+char const *entry_error_messages[] = {
+  "SYNC_INVALID_EL1t",   "IRQ_INVALID_EL1t",   "FIQ_INVALID_EL1t",   "ERROR_INVALID_EL1T",
+
+  "SYNC_INVALID_EL1h",   "IRQ_INVALID_EL1h",   "FIQ_INVALID_EL1h",   "ERROR_INVALID_EL1h",
+
+  "SYNC_INVALID_EL0_64", "IRQ_INVALID_EL0_64", "FIQ_INVALID_EL0_64", "ERROR_INVALID_EL0_64",
+
+  "SYNC_INVALID_EL0_32", "IRQ_INVALID_EL0_32", "FIQ_INVALID_EL0_32", "ERROR_INVALID_EL0_32"
+};
+
+void irq_interrupt_controller_enable(void) {
+#if (RPI_VERSION == 4)
+  IRQ0_REG_MAP->IRQx_SET_EN_0 = AUX_mUART_IRQ;
+#else
+  IRQ_REG_MAP->IRQ_ENABLE_IRQS_1 = AUX_mUART_IRQ;
+#endif
+}
+
+void irq_invalid_entry_message(int type, unsigned long esr, unsigned long address) {
+  printf("%s, ESR: %lx, address: %lx\n", entry_error_messages[type], esr, address);
+}
+
+void irq_handler(void) {
+  u32 irq_lo = 0U;
+//u32 irq_hi = 0U;
+#if (RPI_VERSION == 4)
+  irq_lo = IRQ0_REG_MAP->IRQx_PENDING_0;
+//irq_hi = IRQ0_REG_MAP->IRQx_PENDING_1;
+#else
+  irq_lo = IRQ_REG_MAP->IRQ_PENDING_1;
+//irq_hi = IRQ_REG_MAP->IRQ_PENDING_2;
+#endif
+  if (SYS_TIMER_IRQ_1 & irq_lo) {
+    // Clear the IRQ bit
+    irq_lo &= ~SYS_TIMER_IRQ_1;
+    // TODO(Implement Sys Timer irq handler)
+    // sys_timer_irq_handler();
+  }
+  if (AUX_mUART_IRQ & irq_lo) {
+    // Clear the IRQ bit
+    irq_lo &= ~AUX_mUART_IRQ;
+    void mini_uart_irq_handler();
+  }
+  if (irq_lo) {
+    printf("Unknown pending IRQ: %x\n", irq_lo);
+  }
+}

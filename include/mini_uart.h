@@ -15,6 +15,13 @@
 #define TXD1 GPIO14
 #define RXD1 GPIO15
 
+/** IER Interrupt Cfg for mUART
+ */
+#define mUART_RX_IRQ_EN (0xD) // [3:2] Must be set to receive interrupts (BCM2837)
+#define mUART_TX_IRQ_EN (0x2)
+#define mUART_RX_IRQ_ST (0x4) // Receiver ISR FIFO have a byte
+#define mUART_TX_IRQ_ST (0x2) // Transmit ISR FIFO is empty
+
 #define mUART_TX_READY  (20U) // Transmitter IDLE AUX_MU_LSR
 #define mUART_RX_READY  (1U)  // Data Ready
 #define mUART_8BIT_MODE (3U)
@@ -41,5 +48,11 @@ void mini_uart_init();
 char mini_uart_recv();
 void mini_uart_send(char c);
 void mini_uart_send_string(char *str);
+
+/**
+ * @brief mini Uart IRQ handler for Interrupts
+ * 
+ */
+void mini_uart_irq_handler(void);
 
 #endif /* MINI_UART_H_ */
